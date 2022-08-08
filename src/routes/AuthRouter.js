@@ -6,7 +6,12 @@ import {login, refreshToken, register, logout} from '../controllers/AuthControll
 
 const authRouter = Router();
 
-authRouter.post('/register', register);
+authRouter.post('/register-admin', async (req, res) => {
+  await register(['admin'], req, res);
+});
+authRouter.post('/register-user', async (req, res) => {
+  await register(['user'], req, res);
+});
 authRouter.post('/login', login);
 authRouter.post('/refresh-token', refreshToken);
 authRouter.delete('/logout', logout);

@@ -11,7 +11,7 @@ import {
 } from '../utility/VerifyRefreshToken.js';
 
 
-const register = async (req, res) => {
+const register = async (roles, req, res) => {
   try {
     const {error} = registerValidation(req.body);
     if (error) {
@@ -29,8 +29,7 @@ const register = async (req, res) => {
 
     const salt = await bcrypt.genSalt(Number(process.env.SALT));
     const hashPassword = await bcrypt.hash(req.body.password, salt);
-
-    await new User({...req.body, password: hashPassword}).save();
+    await new User({...req.body, password: hashPassword, roles}).save();
 
     res
         .status(201)
@@ -40,6 +39,7 @@ const register = async (req, res) => {
     res.status(500).json({error: true, message: 'Internal Server Error'});
   }
 };
+
 
 const login = async (req, res) => {
   try {
